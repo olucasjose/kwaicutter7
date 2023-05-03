@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kwaicutter GUI</title>
+    <style>
+    /* Estilos para o corpo da página */
+  body {
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    background-color: #333;
+  }
+
+  /* Estilos para o vídeo */
+  #video {
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  /* Estilos para o botão de upload de arquivo */
+  #fileInput {
+    width: 96%;
+    margin-top: 20px;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2c3e50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  #fileInput:hover {
+    background-color: #2c3e50;
+  }
+
+  /* Estilos para os campos de tempo */
+  label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f5f5f5;
+  }
+
+  input[type="text"] {
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #444;
+    margin: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+    color: #f5f5f5;
+  }
+
+  input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(63, 81, 181, 0.5);
+  }
+
+  /* Estilos para o botão "Copiar" */
+  button {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2c3e50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  button:hover {
+    background-color: #000000;
+  }
+
+  /* Estilos para a duração do vídeo */
+  #duration {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #f5f5f5;
+  }
+
+  </style>
+  </head>
+  <body>
+    <video id="video" controls></video>
+    <input type="file" id="fileInput">
+    <br>
+    <label for="start">Início</label>
+    <input type="text" id="start" placeholder="hh:mm:ss.sss">
+    <br>
+    <label for="end">Final</label>
+    <input type="text" id="end" placeholder="hh:mm:ss.sss">
+    <br>
+    <label for="duration"><b>Duração:</b></label>
+    <span id="duration"></span>
+    <br>
+    <input type="text" id="field1" maxlength="20">
+    <br>
+    <input type="text" id="field2" maxlength="20">
+    <script>
+      const video = document.getElementById('video');
+      const fileInput = document.getElementById('fileInput');
+      const startInput = document.getElementById('start');
+      const endInput = document.getElementById('end');
+      const durationSpan = document.getElementById('duration');
+      const field1 = document.getElementById('field1');
+      const field2 = document.getElementById('field2');
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        const url = URL.createObjectURL(file);
+        video.setAttribute('src', url);
+      });
+      startInput.addEventListener('change', () => {
+        const time = startInput.value;
+        video.currentTime = parseTime(time);
+      });
+      endInput.addEventListener('change', () => {
+        const time = endInput.value;
+        video.pause();
+        video.currentTime = parseTime(time);
+      });
+      video.addEventListener('timeupdate', () => {
+        const start = parseTime(startInput.value);
+        const end = parseTime(endInput.value);
+        if (video.currentTime < start || video.currentTime > end) {
+          video.currentTime = start;
+        }
+        const duration = end - start;
+        durationSpan.textContent = formatTime(duration);
+      });
+      function parseTime(timeString) {
+        const [hours, minutes, seconds] = timeString.split(':').map(parseFloat);
+        const milliseconds = parseFloat(timeString.split('.').pop());
+        return (hours * 60 * 60) + (minutes * 60) + seconds + (milliseconds / 1000);
+      }
+      function formatTime(time) {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+        const seconds = Math.floor(time % 60);
+        const milliseconds = Math.floor((time * 1000) % 1000);
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+      }
+const startCopyButton = document.createElement('button');
+startCopyButton.textContent = 'Copiar';
+startInput.insertAdjacentElement('afterend', startCopyButton);
+startCopyButton.addEventListener('click', () => {
+  const startValue = startInput.value;
+  navigator.clipboard.writeText(startValue)
+});
+
+const endCopyButton = document.createElement('button');
+endCopyButton.textContent = 'Copiar';
+endInput.insertAdjacentElement('afterend', endCopyButton);
+endCopyButton.addEventListener('click', () => {
+  const endValue = endInput.value;
+  navigator.clipboard.writeText(endValue)
+});
+
+video.setAttribute('controlsList', 'nodownload');
+
+    </script>
+  </body>
+</html>
