@@ -106,6 +106,7 @@
     <button id="copyBtn">Copiar</button>
     <br>
     <input type="text" id="field2" maxlength="20">
+    <button id="copyField2">Copiar</button>
     <script>
       const video = document.getElementById('video');
       const fileInput = document.getElementById('fileInput');
@@ -168,6 +169,11 @@ endCopyButton.addEventListener('click', () => {
 const copyBtn = document.getElementById('copyBtn');
 copyBtn.addEventListener('click', () => {
   navigator.clipboard.writeText(field1.value);
+});
+
+const copyField2 = document.getElementById('copyField2');
+copyField2.addEventListener('click', () => {
+  navigator.clipboard.writeText(field2.value);
 });
 
 video.setAttribute('controlsList', 'nodownload');
