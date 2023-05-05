@@ -23,10 +23,10 @@
     <span id="duration"></span>
     <br>
     <input type="text" id="field1" maxlength="20">
-    <button id="copyBtn">Copiar</button>
+    <button id="copyBtn">Copiora</button>
     <br>
     <input type="text" id="field2" maxlength="20">
-    <button id="copyField2">Copiar</button>
+    <button id="copyField2">Copiora</button>
     
     
     
@@ -73,6 +73,8 @@
         const milliseconds = Math.floor((time * 1000) % 1000);
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
       }
+
+/*
 const startCopyButton = document.createElement('button');
 startCopyButton.textContent = 'Copiar';
 startInput.insertAdjacentElement('afterend', startCopyButton);
@@ -88,6 +90,7 @@ endCopyButton.addEventListener('click', () => {
   const endValue = endInput.value;
   navigator.clipboard.writeText(endValue)
 });
+*/
 
 const copyBtn = document.getElementById('copyBtn');
 copyBtn.addEventListener('click', () => {
@@ -182,7 +185,7 @@ video.setAttribute('controlsList', 'nodownload');
     box-shadow: 0 0 5px rgba(63, 81, 181, 0.5);
   }
 
-  /* Estilos para o botão "Copiar" */
+  /* Estilos para o botão "Copiora" */
   button {
     font-size: 16px;
     padding: 10px 20px;
