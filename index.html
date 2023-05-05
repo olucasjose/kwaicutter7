@@ -11,26 +11,32 @@
     <!-- <input type="file" id="fileInput"> -->
     <input type="file" id="fileInput" accept="video/*">
     <br>
-    <label for="start">Início</label>
-    <input type="text" id="start" placeholder="hh:mm:ss.sss">
-    <button id="copycomeco">KakashiINI</button>
-    <br>
-    <label for="end">Final</label>
-    <input type="text" id="end" placeholder="hh:mm:ss.sss">
-    <button id="copyfim">KakashiFIM</button>
-    <br>
-    <label for="duration"><b>Duração:</b></label>
+    <div class="input-group">
+      <!-- <label for="start">Início</label> -->
+      <input type="text" id="start" placeholder="Início em hh:mm:ss.sss">
+      <button id="copycomeco">Copiar</button>
+      <br>
+    </div>
+    <div class="input-group">
+      <!-- <label for="end">Final</label> -->
+      <input type="text" id="end" placeholder="Final em hh:mm:ss.sss">
+      <button id="copyfim">Copiar</button>
+      <br>
+    </div>
+    
+    <label for="duration"><b>⏱️</b></label>
     <span id="duration"></span>
     <br>
     <input type="text" id="field1" maxlength="20">
-    <button id="copyBtn">Copiora</button>
+    <button id="copyBtn">Copiar</button>
     <br>
     <input type="text" id="field2" maxlength="20">
-    <button id="copyField2">Copiora</button>
+    <button id="copyField2">Copiar</button>
     
     
     
     <script>
+      
       const video = document.getElementById('video');
       const fileInput = document.getElementById('fileInput');
       const startInput = document.getElementById('start');
@@ -118,6 +124,14 @@ copyfim.addEventListener('click', () => {
 
 video.setAttribute('controlsList', 'nodownload');
 
+window.onbeforeunload = function() {
+  return "Tem certeza de que deseja sair desta página? Você pode perder dados não salvos.";
+};
+
+
+
+
+
     </script>
 
 
@@ -158,6 +172,16 @@ video.setAttribute('controlsList', 'nodownload');
 
   /* Loucura */
 
+  .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .input-group label {
+    margin-right: 0px;
+  }
 
 
   /* Estilos para os campos de tempo */
