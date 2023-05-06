@@ -3,8 +3,8 @@
   const startInput = document.getElementById('start');
   const endInput = document.getElementById('end');
   const durationSpan = document.getElementById('duration');
-  const field1 = document.getElementById('field1');
-  const field2 = document.getElementById('field2');
+  const campo1 = document.getElementById('campo1');
+  const campo2 = document.getElementById('campo2');
   fileInput.addEventListener('change', () => {
 const file = fileInput.files[0];
 const url = URL.createObjectURL(file);
@@ -41,26 +41,26 @@ const milliseconds = Math.floor((time * 1000) % 1000);
 return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
   }
 
-const copyBtn = document.getElementById('copyBtn');
-copyBtn.addEventListener('click', () => {
-  navigator.clipboard.writeText(field1.value);
+const bCampo1 = document.getElementById('bCampo1');
+bCampo1.addEventListener('click', () => {
+  navigator.clipboard.writeText(campo1.value);
 });
 
-const copyField2 = document.getElementById('copyField2');
-copyField2.addEventListener('click', () => {
-  navigator.clipboard.writeText(field2.value);
+const bCampo2 = document.getElementById('bCampo2');
+bCampo2.addEventListener('click', () => {
+  navigator.clipboard.writeText(campo2.value);
 });
 
 
-const copycomeco = document.getElementById('copycomeco');
+const bStart = document.getElementById('bStart');
 const start = document.getElementById('start');
-copycomeco.addEventListener('click', () => {
+bStart.addEventListener('click', () => {
   navigator.clipboard.writeText(start.value);
 });
 
-const copyfim = document.getElementById('copyfim');
+const bEnd = document.getElementById('bEnd');
 const end = document.getElementById('end');
-copyfim.addEventListener('click', () => {
+bEnd.addEventListener('click', () => {
   navigator.clipboard.writeText(end.value);
 });
 
