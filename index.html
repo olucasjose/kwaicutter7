@@ -16,6 +16,7 @@
         .search-container {
             width: 90%;
             max-width: 600px;
+            position: relative;
         }
         
         .search-bar {
@@ -33,30 +34,153 @@
             border-color: #444;
             background-color: #222;
         }
+        
+        .suggestions {
+            position: absolute;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #222;
+            border-radius: 12px;
+            margin-top: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+        
+        .suggestion-item {
+            padding: 12px 15px;
+            color: #ddd;
+            cursor: pointer;
+        }
+        
+        .suggestion-item:hover {
+            background: #333;
+        }
     </style>
 </head>
 <body>
     <div class="search-container">
         <input type="text" class="search-bar" placeholder="Pesquisar ou digitar um URL" id="searchInput">
+        <div class="suggestions" id="suggestions"></div>
     </div>
 
     <script>
         const searchInput = document.getElementById("searchInput");
+        const suggestionsBox = document.getElementById("suggestions");
         
+        // Buscas salvas no localStorage (histórico)
+        let searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
+        
+        // Exemplo de sugestões de autocompletar (pode ser substituído por uma API)
+        const autocompleteSuggestions = [
+            "como fazer um bolo",
+            "previsão do tempo",
+            "melhores filmes 2024",
+            "como aprender programação"
+        ];
+        
+        // Mostra sugestões ao digitar
+        searchInput.addEventListener("input", function() {
+            const inputText = searchInput.value.toLowerCase();
+            
+            if (!inputText) {
+                showRecentSearches();
+                return;
+            }
+            
+            // Filtra sugestões de autocompletar
+            const filteredAutocomplete = autocompleteSuggestions.filter(item => 
+                item.toLowerCase().includes(inputText)
+            );
+            
+            // Filtra histórico de buscas
+            const filteredHistory = searchHistory.filter(item => 
+                item.toLowerCase().includes(inputText)
+            );
+            
+            // Combina resultados (priorizando histórico)
+            const suggestions = [...filteredHistory, ...filteredAutocomplete];
+            
+            showSuggestions(suggestions);
+        });
+        
+        // Mostra histórico recente ao clicar na barra vazia
+        searchInput.addEventListener("focus", function() {
+            if (!searchInput.value) {
+                showRecentSearches();
+            }
+        });
+        
+        // Pesquisa ao pressionar Enter
         searchInput.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 const query = searchInput.value.trim();
                 if (query) {
-                    // Verifica se é um URL (começa com http:// ou https://)
+                    // Salva no histórico (evita duplicatas)
+                    if (!searchHistory.includes(query)) {
+                        searchHistory.unshift(query); // Adiciona no início
+                        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+                    }
+                    
+                    // Verifica se é um URL
                     if (query.startsWith("http://") || query.startsWith("https://")) {
                         window.location.href = query;
                     } else {
-                        // Busca no Google
                         window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
                     }
                 }
             }
         });
+        
+        // Fecha sugestões ao clicar fora
+        document.addEventListener("click", function(e) {
+            if (e.target !== searchInput) {
+                suggestionsBox.style.display = "none";
+            }
+        });
+        
+        // Mostra o histórico recente
+        function showRecentSearches() {
+            if (searchHistory.length > 0) {
+                showSuggestions(searchHistory, "Recentes");
+            } else {
+                suggestionsBox.style.display = "none";
+            }
+        }
+        
+        // Exibe sugestões na lista suspensa
+        function showSuggestions(items, title = "") {
+            if (items.length === 0) {
+                suggestionsBox.style.display = "none";
+                return;
+            }
+            
+            suggestionsBox.innerHTML = "";
+            
+            if (title) {
+                const titleElement = document.createElement("div");
+                titleElement.style.padding = "10px 15px";
+                titleElement.style.color = "#888";
+                titleElement.textContent = title;
+                suggestionsBox.appendChild(titleElement);
+            }
+            
+            items.forEach(item => {
+                const suggestionElement = document.createElement("div");
+                suggestionElement.className = "suggestion-item";
+                suggestionElement.textContent = item;
+                
+                suggestionElement.addEventListener("click", function() {
+                    searchInput.value = item;
+                    suggestionsBox.style.display = "none";
+                    searchInput.focus();
+                });
+                
+                suggestionsBox.appendChild(suggestionElement);
+            });
+            
+            suggestionsBox.style.display = "block";
+        }
     </script>
 </body>
 </html>
