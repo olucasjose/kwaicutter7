@@ -1,33 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KC</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .search-container {
+            width: 90%;
+            max-width: 600px;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #333;
+            border-radius: 24px;
+            outline: none;
+            background-color: #111;
+            color: white;
+        }
+        
+        .search-bar:focus {
+            border-color: #444;
+            background-color: #222;
+        }
+    </style>
 </head>
-
 <body>
-    <video id="video" controls></video>
-    <input type="file" id="fileInput" accept="video/*">
-    <label for="duration">Cut:</label>
-    <span id="duration"></span>
-    <div class="iGroup">
-        <input type="text" id="start" placeholder="Start time">
-        <button id="bStart">C</button>
-        <input type="text" id="end" placeholder="End time">
-        <button id="bEnd">C</button>
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Pesquisar ou digitar um URL" id="searchInput">
     </div>
-    <div class="iGroup">
-        <input type="text" id="campo1" maxlength="20" placeholder="Title line 1">
-        <button id="bCampo1">C</button>
-    </div>
-    <div class="iGroup">
-        <input type="text" id="campo2" maxlength="20" placeholder="Title line 2">
-        <button id="bCampo2">C</button>
-    </div>
-    <script src="script.js"></script>
-</body>
 
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        
+        searchInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                const query = searchInput.value.trim();
+                if (query) {
+                    // Verifica se é um URL (começa com http:// ou https://)
+                    if (query.startsWith("http://") || query.startsWith("https://")) {
+                        window.location.href = query;
+                    } else {
+                        // Busca no Google
+                        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                    }
+                }
+            }
+        });
+    </script>
+</body>
 </html>
